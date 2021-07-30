@@ -1,0 +1,31 @@
+PODS:
+  - Flutter (1.0.0)
+  - ppk_flutter (1.0.0):
+    - Flutter
+    - PSPDFKit
+  - PSPDFKit (10.5.0):
+    - PSPDFKit/Core (= 10.5.0)
+  - PSPDFKit/Core (10.5.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - ppk_flutter (from `.symlinks/plugins/ppk_flutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - PSPDFKit
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  ppk_flutter:
+    :path: ".symlinks/plugins/ppk_flutter/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  ppk_flutter: 61bbe56ba58f9dcb2cf2105923152bbf22da481a
+  PSPDFKit: db2447634cf16af92dafc3dec8943eab20a7bde7
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.1
