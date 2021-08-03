@@ -28,6 +28,61 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   String _frameworkVersion = '';
 
+  PPKConfiguration configuration = PPKConfiguration(
+    scrollDirection: PPKScrollDirection.vertical,
+    pageTransition: PPKPageTransition.scrollContinuous,
+    spreadFitting: PPKSpreadFitting.fill,
+    userInterfaceViewMode: PPKUserInterfaceViewMode.automaticNoFirstLastPage, 
+    searchMode: PPKSearchMode.inline,
+    thumbnailBarMode: PPKThumbnailBarMode.floatingScrubberBar,
+    pageLabelEnabled: true,
+    documentLabelEnabled: PPKAdaptiveConditional.no,
+    pageIndex: 0,
+    editableAnnotationTypes: [
+      PPKAnnotationType.circle,
+      PPKAnnotationType.ink,
+      PPKAnnotationType.freeText
+    ],
+    textSelectionEnabled: false,
+    appearanceMode: PPKAppearanceMode.deflt,
+    rightBarButtonItems: [
+      
+      PPKBarButtonItem.bookmarkButtonItem,
+      PPKBarButtonItem.activityButtonItem,
+      PPKBarButtonItem.annotationButtonItem,
+      PPKBarButtonItem.thumbnailsButtonItem,
+      PPKBarButtonItem.outlineButtonItem,
+    ],
+    leftBarButtonItems: [
+      PPKBarButtonItem.settingsButtonItem,
+    ],
+    allowToolbarTitleChange: false,
+    toolbarTitle: "",
+    documentInfoOptions: PPKDocumentInfoViewConfiguration(
+      outline: true,
+      annotations: false,
+      embeddedFiles: false,
+      bookmarks: false,
+      documentInfo: false,
+      security: false,
+    ),
+    settingsOptions: [
+      PPKSettingsOption.theme,           // Android only
+      PPKSettingsOption.appearance,      // iOS only, same as theme above
+      PPKSettingsOption.pageTransition,  // both
+      PPKSettingsOption.brightness,      // iOS only
+      PPKSettingsOption.pageMode,        // iOS only
+      PPKSettingsOption.spreadFitting,   // iOS only
+      PPKSettingsOption.scrollDirection, // both
+    ],
+    showBackActionButton: true,
+    showForwardActionButton: true,
+    showBackForwardActionButtonLabels: false,
+    pageMode: PPKPageMode.single,
+    firstPageAlwaysSingle: true
+    // to add
+  );
+
   Future<File> extractAsset(String assetPath) async {
     final bytes = await DefaultAssetBundle.of(context).load(assetPath);
     final list = bytes.buffer.asUint8List();
@@ -40,17 +95,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return file;
   }
 
-  void showDocument() async {
+  void _showDocumentWithConfiguration(File document, { PPKConfiguration? configuration}) async {
     try {
-      final extractedDocument = await extractAsset(_pdfDocument);
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
-        await Navigator.of(context).push<dynamic>(CupertinoPageRoute<dynamic>(
-            builder: (_) => CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(),
-                child: SafeArea(
-                    bottom: false,
-                    child: PPKWidget(
-                        documentPath: extractedDocument.path)))));
+      if (Platform.isIOS) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => Scaffold(
+            appBar: AppBar(title: Text("Document")),
+            body: SafeArea(
+              bottom: false,
+              child: PPKWidget(documentPath: document.path, configuration: configuration),
+            ),
+          ),
+        ));
       } else {
         // PspdfkitWidget is only supported in iOS at the moment.
         // Support for Android is coming soon.
@@ -60,28 +116,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
-  void applyCustomConfiguration() async {
-    PPKConfiguration configuration = PPKConfiguration(
-
-    );
+  void showDocument() async {
     try {
       final extractedDocument = await extractAsset(_pdfDocument);
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
-        await Navigator.of(context).push<dynamic>(
-          CupertinoPageRoute<dynamic>(
-            builder: (_) => CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(),
-              child: SafeArea(
-                bottom: false,
-                child: PPKWidget(documentPath: extractedDocument.path, configuration: configuration),
-              ),
-            ),
-          ),
-        );
-      } else {
-        // PspdfkitWidget is only supported in iOS at the moment.
-        // Support for Android is coming soon.
-      }
+      _showDocumentWithConfiguration(extractedDocument);
+    } on PlatformException catch (e) {
+      print("Failed to present document: '${e.message}'.");
+    }
+  }
+
+  void applyCustomConfiguration() async {
+    try {
+      final extractedDocument = await extractAsset(_pdfDocument);
+      _showDocumentWithConfiguration(extractedDocument, configuration: configuration);
     } on PlatformException catch (e) {
       print("Failed to present image document: '${e.message}'.");
     }
@@ -103,7 +150,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void applyCustomConfigurationGlobal() async {
     try {
       final extractedDocument = await extractAsset(_pdfDocument);
-      final configuration = PPKConfiguration();
       await PPKProxy.instance.presentGlobal(extractedDocument.path, configuration: configuration);
     } on PlatformException catch (e) {
       print("Failed to present document: '${e.message}'.");
