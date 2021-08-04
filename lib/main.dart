@@ -196,6 +196,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     // specific initialization). If you want to use a different license key for evaluation (e.g. a production license), you can uncomment
     // the next line and set the license key.
     // await Pspdfkit.setLicenseKey("YOUR_LICENSE_KEY_GOES_HERE");
+    print("PSPDFKit Version $_frameworkVersion");
   }
 
   void flutterPdfActivityOnPauseHandler() {
