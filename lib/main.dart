@@ -58,14 +58,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     ],
     allowToolbarTitleChange: false,
     toolbarTitle: "",
-    documentInfoOptions: PPKDocumentInfoViewConfiguration(
-      outline: true,
-      annotations: false,
-      embeddedFiles: false,
-      bookmarks: false,
-      documentInfo: false,
-      security: false,
-    ),
+    documentInfoOptions: [
+      PPKDocumentInfoViewOpton.outline,
+      PPKDocumentInfoViewOpton.annotations,
+      PPKDocumentInfoViewOpton.embeddedFiles,
+      PPKDocumentInfoViewOpton.bookmarks,
+      PPKDocumentInfoViewOpton.documentInfo,
+      PPKDocumentInfoViewOpton.security,
+    ],
     settingsOptions: [
       PPKSettingsOption.theme,           // Android only
       PPKSettingsOption.appearance,      // iOS only, same as theme above
