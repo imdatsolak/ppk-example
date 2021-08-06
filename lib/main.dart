@@ -59,12 +59,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     allowToolbarTitleChange: false,
     toolbarTitle: "",
     documentInfoOptions: [
-      PPKDocumentInfoViewOpton.outline,
-      PPKDocumentInfoViewOpton.annotations,
-      PPKDocumentInfoViewOpton.embeddedFiles,
-      PPKDocumentInfoViewOpton.bookmarks,
-      PPKDocumentInfoViewOpton.documentInfo,
-      PPKDocumentInfoViewOpton.security,
+      PPKDocumentInfoViewOption.outline,
+      PPKDocumentInfoViewOption.annotations,
+      PPKDocumentInfoViewOption.embeddedFiles,
+      PPKDocumentInfoViewOption.bookmarks,
+      PPKDocumentInfoViewOption.documentInfo,
+      PPKDocumentInfoViewOption.security,
     ],
     settingsOptions: [
       PPKSettingsOption.theme,           // Android only
@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void showDocumentGlobal() async {
     try {
       final extractedDocument = await extractAsset(_pdfDocument);
-      await PPKProxy.instance.presentGlobal(extractedDocument.path, );
+      await PPKProxy.instance.present(extractedDocument.path, );
     } on PlatformException catch (e) {
       print("Failed to present document: '${e.message}'.");
     }
@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void applyCustomConfigurationGlobal() async {
     try {
       final extractedDocument = await extractAsset(_pdfDocument);
-      await PPKProxy.instance.presentGlobal(extractedDocument.path, configuration: configuration);
+      await PPKProxy.instance.present(extractedDocument.path, configuration: configuration);
     } on PlatformException catch (e) {
       print("Failed to present document: '${e.message}'.");
     }
