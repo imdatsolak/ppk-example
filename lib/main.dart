@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void applyCustomConfigurationGlobal() async {
     try {
       final extractedDocument = await extractAsset(_pdfDocument);
-      await PPKProxy.instance.present(extractedDocument.path, configuration: configuration);
+      await PPKProxy.instance.presentWithWatermark(extractedDocument.path, "Watermarked for Me", configuration: configuration);
     } on PlatformException catch (e) {
       print("Failed to present document: '${e.message}'.");
     }
@@ -213,9 +213,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    PPKProxy.instance.pdfActivityOnPause = () => flutterPdfActivityOnPauseHandler();
-    PPKProxy.instance.pdfViewControllerWillDismiss = () => pdfViewControllerWillDismissHandler();
-    PPKProxy.instance.pdfViewControllerDidDismiss = () => pdfViewControllerDidDismissHandler();
+    PPKProxy.instance.ppkActivityPaused = () => flutterPdfActivityOnPauseHandler();
+    PPKProxy.instance.ppkViewControllerWillDismiss = () => pdfViewControllerWillDismissHandler();
+    PPKProxy.instance.ppkViewControllerDidDismiss = () => pdfViewControllerDidDismissHandler();
     return Scaffold(
         appBar: AppBar(title: Text("PPKTest")),
         body: Container(
