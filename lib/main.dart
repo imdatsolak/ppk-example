@@ -1,3 +1,16 @@
+/*
+ * **********************************************************************
+ * PPK Flutter - A plugin to provide expanded Interface to PSPDFKit
+ *
+ * Copyright (c) 2021 Imdat Solak (imdat@solak.de)
+ *
+ * For license, check out LICENSE.txt in the root of this repository
+ * **********************************************************************
+ */
+
+// Some parts are based on code from https://github.com/PSPDFKit/pspdfkit_flutter
+// Copyright (c) PSPDFKit GmbH
+
 import "dart:async";
 import "dart:io";
 
@@ -11,7 +24,6 @@ const String _pdfDocument = "pdfs/430508_m_slr2-5_product_reference_en.pdf";
 void main() {
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -29,59 +41,54 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   String _frameworkVersion = '';
 
   PPKConfiguration configuration = PPKConfiguration(
-    scrollDirection: PPKScrollDirection.vertical,
-    pageTransition: PPKPageTransition.scrollContinuous,
-    spreadFitting: PPKSpreadFitting.fill,
-    userInterfaceViewMode: PPKUserInterfaceViewMode.automaticNoFirstLastPage, 
-    searchMode: PPKSearchMode.inline,
-    thumbnailBarMode: PPKThumbnailBarMode.floatingScrubberBar,
-    pageLabelEnabled: true,
-    documentLabelEnabled: PPKAdaptiveConditional.no,
-    pageIndex: 0,
-    editableAnnotationTypes: [
-      PPKAnnotationType.circle,
-      PPKAnnotationType.ink,
-      PPKAnnotationType.freeText
-    ],
-    textSelectionEnabled: false,
-    appearanceMode: PPKAppearanceMode.deflt,
-    rightBarButtonItems: [
-      
-      PPKBarButtonItem.bookmarkButtonItem,
-      PPKBarButtonItem.activityButtonItem,
-      PPKBarButtonItem.annotationButtonItem,
-      PPKBarButtonItem.thumbnailsButtonItem,
-      PPKBarButtonItem.outlineButtonItem,
-    ],
-    leftBarButtonItems: [
-      PPKBarButtonItem.settingsButtonItem,
-    ],
-    allowToolbarTitleChange: false,
-    toolbarTitle: "",
-    documentInfoOptions: [
-      PPKDocumentInfoViewOption.outline,
-      PPKDocumentInfoViewOption.annotations,
-      PPKDocumentInfoViewOption.embeddedFiles,
-      PPKDocumentInfoViewOption.bookmarks,
-      PPKDocumentInfoViewOption.documentInfo,
-      PPKDocumentInfoViewOption.security,
-    ],
-    settingsOptions: [
-      PPKSettingsOption.theme,           // Android only
-      PPKSettingsOption.appearance,      // iOS only, same as theme above
-      PPKSettingsOption.pageTransition,  // both
-      PPKSettingsOption.brightness,      // iOS only
-      PPKSettingsOption.pageMode,        // iOS only
-      PPKSettingsOption.spreadFitting,   // iOS only
-      PPKSettingsOption.scrollDirection, // both
-    ],
-    showBackActionButton: true,
-    showForwardActionButton: true,
-    showBackForwardActionButtonLabels: false,
-    pageMode: PPKPageMode.single,
-    firstPageAlwaysSingle: true
-    // to add
-  );
+      scrollDirection: PPKScrollDirection.vertical,
+      pageTransition: PPKPageTransition.scrollContinuous,
+      spreadFitting: PPKSpreadFitting.fill,
+      userInterfaceViewMode: PPKUserInterfaceViewMode.automaticNoFirstLastPage,
+      searchMode: PPKSearchMode.inline,
+      thumbnailBarMode: PPKThumbnailBarMode.floatingScrubberBar,
+      pageLabelEnabled: true,
+      documentLabelEnabled: PPKAdaptiveConditional.no,
+      pageIndex: 0,
+      editableAnnotationTypes: [PPKAnnotationType.circle, PPKAnnotationType.ink, PPKAnnotationType.freeText],
+      textSelectionEnabled: false,
+      appearanceMode: PPKAppearanceMode.deflt,
+      rightBarButtonItems: [
+        PPKBarButtonItem.bookmarkButtonItem,
+        PPKBarButtonItem.activityButtonItem,
+        PPKBarButtonItem.annotationButtonItem,
+        PPKBarButtonItem.thumbnailsButtonItem,
+        PPKBarButtonItem.outlineButtonItem,
+      ],
+      leftBarButtonItems: [
+        PPKBarButtonItem.settingsButtonItem,
+      ],
+      allowToolbarTitleChange: false,
+      toolbarTitle: "",
+      documentInfoOptions: [
+        PPKDocumentInfoViewOption.outline,
+        PPKDocumentInfoViewOption.annotations,
+        PPKDocumentInfoViewOption.embeddedFiles,
+        PPKDocumentInfoViewOption.bookmarks,
+        PPKDocumentInfoViewOption.documentInfo,
+        PPKDocumentInfoViewOption.security,
+      ],
+      settingsOptions: [
+        PPKSettingsOption.theme, // Android only
+        PPKSettingsOption.appearance, // iOS only, same as theme above
+        PPKSettingsOption.pageTransition, // both
+        PPKSettingsOption.brightness, // iOS only
+        PPKSettingsOption.pageMode, // iOS only
+        PPKSettingsOption.spreadFitting, // iOS only
+        PPKSettingsOption.scrollDirection, // both
+      ],
+      showBackActionButton: true,
+      showForwardActionButton: true,
+      showBackForwardActionButtonLabels: false,
+      pageMode: PPKPageMode.single,
+      firstPageAlwaysSingle: true
+      // to add
+      );
 
   Future<File> extractAsset(String assetPath) async {
     final bytes = await DefaultAssetBundle.of(context).load(assetPath);
@@ -95,7 +102,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return file;
   }
 
-  void _showDocumentWithConfiguration(File document, { PPKConfiguration? configuration}) async {
+  void _showDocumentWithConfiguration(File document, {PPKConfiguration? configuration}) async {
     try {
       if (Platform.isIOS) {
         Navigator.of(context).push(MaterialPageRoute(
@@ -134,14 +141,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
-
-  void onWidgetCreated(PPKWidget view) async {
-  }
+  void onWidgetCreated(PPKWidget view) async {}
 
   void showDocumentGlobal() async {
     try {
       final extractedDocument = await extractAsset(_pdfDocument);
-      await PPKProxy.instance.present(extractedDocument.path, );
+      await PPKProxy.instance.present(
+        extractedDocument.path,
+      );
     } on PlatformException catch (e) {
       print("Failed to present document: '${e.message}'.");
     }
@@ -217,29 +224,29 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     PPKProxy.instance.ppkViewControllerWillDismiss = () => pdfViewControllerWillDismissHandler();
     PPKProxy.instance.ppkViewControllerDidDismiss = () => pdfViewControllerDidDismissHandler();
     return Scaffold(
-        appBar: AppBar(title: Text("PPKTest")),
-        body: Container(
-          child: ListView(
-            children: <Widget>[
-              ListTile(
-                title: Text("View Widget (iOS only)"),
-                onTap: showDocument,
-              ),
-              ListTile(
-                title: Text("Config Widget (iOS only)"),
-                onTap: applyCustomConfiguration,
-              ),
-              ListTile(
-                title: Text("View Global"),
-                onTap: showDocumentGlobal,
-              ),
-              ListTile(
-                title: Text("Config Global"),
-                onTap: applyCustomConfigurationGlobal,
-              ),
-            ],
-          ),
+      appBar: AppBar(title: Text("PPKTest")),
+      body: Container(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              title: Text("View Widget (iOS only)"),
+              onTap: showDocument,
+            ),
+            ListTile(
+              title: Text("Config Widget (iOS only)"),
+              onTap: applyCustomConfiguration,
+            ),
+            ListTile(
+              title: Text("View Global"),
+              onTap: showDocumentGlobal,
+            ),
+            ListTile(
+              title: Text("Config Global"),
+              onTap: applyCustomConfigurationGlobal,
+            ),
+          ],
         ),
+      ),
     );
   }
 }
