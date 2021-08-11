@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="thumbnail_bar_height">54dp</dimen>
+    <dimen name="thumbnail_bar_width">54dp</dimen>
+</resources>
