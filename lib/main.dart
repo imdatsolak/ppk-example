@@ -87,6 +87,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       showBackForwardActionButtonLabels: false,
       pageMode: PPKPageMode.single,
       firstPageAlwaysSingle: true,
+      barButtonColor: Colors.red,
       themeName: "PPKExample.Theme",
       // to add
       );
